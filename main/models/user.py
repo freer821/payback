@@ -7,7 +7,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(100))
+    _password = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.utcnow)
 
@@ -17,10 +17,18 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
-        self.password = flask_bcrypt.generate_password_hash(password).decode('utf-8')
+        self._password = flask_bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
-        return flask_bcrypt.check_password_hash(self.password, password)
+        return flask_bcrypt.check_password_hash(self._password, password)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)

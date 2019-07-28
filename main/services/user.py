@@ -1,25 +1,28 @@
-from ..models.user import User, db
+from ..models.user import User
+from ..utils.http_helper import getresponsemsg
+from flask_jwt_extended import (create_access_token)
+
+def authenticate_user(username, password):
+    user = get_a_user(username)
+    if user and user.check_password(password):
+        access_token = create_access_token(identity=username)
+        return getresponsemsg(200, {'token': access_token})
+    else:
+        return getresponsemsg(400)
 
 
-def save_new_user(data):
-    user = User.query.filter_by(username=data['username']).first()
+def create_new_user(username, password):
+    user = User.query.filter_by(username=username).first()
     if not user:
         new_user = User(
-            username=data['username'],
-            password=data['password'],
+            username=username,
+            password=password,
         )
-        save_changes(new_user)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully registered.'
-        }
-        return response_object, 201
+        new_user.save_to_db()
+
+        return getresponsemsg(200, 'Successfully registered.')
     else:
-        response_object = {
-            'status': 'fail',
-            'message': 'User already exists. Please Log in.',
-        }
-        return response_object, 409
+        return getresponsemsg(409, 'User already exists.')
 
 
 def get_all_users():
@@ -28,8 +31,3 @@ def get_all_users():
 
 def get_a_user(username):
     return User.query.filter_by(username=username).first()
-
-
-def save_changes(data):
-    db.session.add(data)
-    db.session.commit()
