@@ -1,6 +1,6 @@
 from flask import request
 from flask_restplus import Namespace, Resource
-
+from flask_jwt_extended import (jwt_required,get_jwt_identity)
 api = Namespace('user', description='Users related operations')
 
 from ..services.user import *
@@ -23,4 +23,14 @@ class UserSignup(Resource):
     def post(self):
         username = request.json.get('username', None)
         password = request.json.get('password', None)
-        return create_new_user(username, password)
+        return create_user(username, password)
+
+
+@api.route('/profile')
+class UserProfile(Resource):
+
+    @json_required
+    @jwt_required
+    def post(self):
+        username = get_jwt_identity()
+        return update_user_profile(username, request.json)
