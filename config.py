@@ -1,5 +1,6 @@
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     """basic config"""
@@ -19,25 +20,18 @@ class Config:
     FLASKY_MAIL_SENDER = '2399447849@qq.com'
     FLASKY_ADMIN = '2399447849@qq.com'
 
-    @staticmethod
-    def init_app(app):
-        pass
 
-
-class DevelopmentConfig(Config):
+class Development(Config):
     DEBUG = True
-
-
-class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'payback_dev.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class Production(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    DEBUG = False
 
 
 config_by_name = {
-    'dev': DevelopmentConfig,
-    'test': TestingConfig,
+    'dev': Development,
     'production': Production,
 }
