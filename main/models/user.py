@@ -1,6 +1,6 @@
 from .. import flask_bcrypt
 from .base import db, Base
-
+from ..utils.com_helper import getRandomNo
 class User(Base):
     """ User Model for storing user related details """
     __tablename__ = "user"
@@ -25,6 +25,7 @@ class Profile(Base):
     __tablename__ = "user_profile"
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_no = db.Column(db.String(50), unique=True, nullable=False, default=getRandomNo)
     full_name = db.Column(db.String(50), default="")
     tel = db.Column(db.String(50), default="")
     address = db.Column(db.String(200), default="")
