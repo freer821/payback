@@ -1,3 +1,5 @@
 .idea
 **/__pycache__
 **/migrations
+payback.code-workspace
+._payback.code-workspace
