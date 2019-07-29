@@ -20,14 +20,13 @@ class User(Base):
     def check_password(self, password):
         return flask_bcrypt.check_password_hash(self._password, password)
 
-    def __repr__(self):
-        return "<User '{}'>".format(self.username)
-
 
 class Profile(Base):
     __tablename__ = "user_profile"
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    name = db.Column(db.String(100), default="")
+    full_name = db.Column(db.String(50), default="")
+    tel = db.Column(db.String(50), default="")
     address = db.Column(db.String(200), default="")
-    passport_no = db.Column(db.String(50), default="")
+    passport = db.Column(db.String(50), default="")
+    role = db.Column(db.String(30), default="")

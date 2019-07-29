@@ -21,9 +21,7 @@ class UserSignup(Resource):
 
     @json_required
     def post(self):
-        username = request.json.get('username', None)
-        password = request.json.get('password', None)
-        return create_user(username, password)
+        return create_user(request.json)
 
 
 @api.route('/profile')
