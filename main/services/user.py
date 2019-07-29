@@ -46,3 +46,12 @@ def update_user_profile(username, data):
         profile.save()
 
     return getresponsemsg(200, "update Successfully!")
+
+def get_profile(username):
+    user = get_user(username)
+    profile = Profile.query.filter_by(user_id=user.id).first()
+
+    if profile:
+        return getresponsemsg(200, profile.to_dict())
+    else:
+        return getresponsemsg(400, "", "user profile not found!")

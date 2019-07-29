@@ -15,7 +15,7 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def run():
-    app.run()
+    app.run(host='0.0.0.0')
 
 if __name__ == "__main__":
     manager.run()

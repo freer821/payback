@@ -1,12 +1,14 @@
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from functools import wraps
 
 def getresponsemsg(status, msg='', err=''):
-    return jsonify({
-        'status': status,
+    # 200 - 300 for sucess
+    # 400 ~ for error
+    # 500 ~ for system error
+    return make_response(jsonify({
         'msg': msg,
         'err': err
-    })
+    }), status)
 
 def json_required(f):
     @wraps(f)
