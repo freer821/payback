@@ -21,9 +21,7 @@ class UserSignup(Resource):
 
     @json_required
     def post(self):
-        username = request.json.get('username', None)
-        password = request.json.get('password', None)
-        return create_user(username, password)
+        return create_user(request.json)
 
 
 @api.route('/profile')
@@ -34,6 +32,11 @@ class UserProfile(Resource):
     def post(self):
         username = get_jwt_identity()
         return update_user_profile(username, request.json)
+
+    @jwt_required
+    def get(self):
+        username = get_jwt_identity()
+        return get_profile(username)
 
 
 @api.route('/users')

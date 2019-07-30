@@ -26,14 +26,18 @@ def authenticate_user(username, password):
         return getresponsemsg(400)
 
 
-def create_user(username, password):
-    user = User.query.filter_by(username=username).first()
+def create_user(data):
+    user = User.query.filter_by(username=data['username']).first()
     if not user:
         new_user = User(
-            username=username,
-            password=password,
+            username=data['username'],
+            password=data['password'],
         )
         new_user.save()
+
+        profile = Profile(user_id=new_user.id, full_name=data.get('full_name',''), tel=data.get('tel', ''),
+                          passport=data.get('passport', ''), role=data.get('role', '0'))
+        profile.save()
 
         return getresponsemsg(200, 'Successfully registered.')
     else:
@@ -62,3 +66,12 @@ def update_user_profile(username, data):
         profile.save()
 
     return getresponsemsg(200, "update Successfully!")
+
+def get_profile(username):
+    user = get_user(username)
+    profile = Profile.query.filter_by(user_id=user.id).first()
+
+    if profile:
+        return getresponsemsg(200, profile.to_dict())
+    else:
+        return getresponsemsg(400, "", "user profile not found!")
