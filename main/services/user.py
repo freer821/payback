@@ -5,7 +5,7 @@ from flask_jwt_extended import (create_access_token)
 def authenticate_user(username, password):
     user = get_user(username)
     if user and user.check_password(password):
-        access_token = create_access_token(identity=username)
+        access_token = create_access_token(identity=username,expires_delta=False)
         return getresponsemsg(200, {'token': access_token})
     else:
         return getresponsemsg(400)
