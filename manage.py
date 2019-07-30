@@ -11,7 +11,7 @@ manager = Manager(app)
 migrate = Migrate(app, db, render_as_batch=True )
 manager.add_command('db', MigrateCommand)
 
-from main.models import user
+from main.models import user, shop
 
 @manager.command
 def run():
