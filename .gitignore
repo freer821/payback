@@ -3,3 +3,5 @@
 **/migrations
 payback.code-workspace
 ._payback.code-workspace
+.vscode
+
