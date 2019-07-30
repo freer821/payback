@@ -34,3 +34,13 @@ class UserProfile(Resource):
     def post(self):
         username = get_jwt_identity()
         return update_user_profile(username, request.json)
+
+
+@api.route('/users')
+class UserList(Resource):
+
+    @json_required
+    @jwt_required
+    def get(self):
+        username = get_jwt_identity()
+        return get_users(username)        

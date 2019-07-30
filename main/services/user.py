@@ -1,6 +1,21 @@
 from ..models.user import User, Profile
 from ..utils.http_helper import getresponsemsg
 from flask_jwt_extended import (create_access_token)
+import json
+
+
+def superuser_required(func):
+    def wrapper(username):
+        user = get_user(username)
+        if not user:
+            return getresponsemsg(401, 'Unauthorized')
+        else:
+            if not user.is_superuser:
+                return getresponsemsg(403, 'Forbidden')
+            else:
+                return func(username)
+        return wrapper
+
 
 def authenticate_user(username, password):
     user = get_user(username)
@@ -25,8 +40,9 @@ def create_user(username, password):
         return getresponsemsg(409, 'User already exists.')
 
 
-def get_users():
-    return User.query.all()
+@superuser_required
+def get_users(current_username):
+    return json.dumps(User.query.all())
 
 
 def get_user(username):

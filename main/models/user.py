@@ -8,6 +8,7 @@ class User(Base):
     username = db.Column(db.String(255), unique=True, nullable=False)
     _password = db.Column(db.String(100))
     profile = db.relationship("Profile", uselist=False, backref="user")
+    is_superuser = db.Column.(db.Boolean())
 
     @property
     def password(self):
